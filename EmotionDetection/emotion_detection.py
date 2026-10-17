@@ -1,12 +1,15 @@
 """Emotion detection using the Watson NLP library."""
 import json
+import os
 import requests
+
+DEFAULT_URL = ('https://sn-watson-emotion.labs.skills.network/v1/'
+               'watson.runtime.nlp.v1/NlpService/EmotionPredict')
 
 
 def emotion_detector(text_to_analyze):
     """Return emotion scores and the dominant emotion for the given text."""
-    url = ('https://sn-watson-emotion.labs.skills.network/v1/'
-           'watson.runtime.nlp.v1/NlpService/EmotionPredict')
+    url = os.environ.get('WATSON_URL', DEFAULT_URL)
     headers = {"grpc-metadata-mm-model-id": "emotion_aggregated-workflow_lang_en_stock"}
     input_json = {"raw_document": {"text": text_to_analyze}}
     response = requests.post(url, json=input_json, headers=headers, timeout=10)
